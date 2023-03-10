@@ -51,7 +51,8 @@ public class FirstDisplay extends JFrame{
 		button1.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new UserLogin();
+				UserLogin userlogin=UserLogin.getInstance();
+				userlogin.setVisible(true);
 				dispose();
 			}
 		});
@@ -65,7 +66,8 @@ public class FirstDisplay extends JFrame{
 		button2.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {	
-					new ManagerLogin();
+					ManagerLogin managerlogin=ManagerLogin.getInstance();
+					managerlogin.setVisible(true);
 					dispose();				
 			}
 	});

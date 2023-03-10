@@ -31,12 +31,6 @@ implements ActionListener{
 	 private JLabel label2;
 	 ImageIcon img=new ImageIcon("C:\\Users\\dita810\\Desktop\\FSCTeam\\FamilyStudycafe\\src\\img\\Button_image/back.jpg");
 	 
-//	 BufferedReader in;
-//	 PrintWriter out;
-//	 String id;
-//	 String host = "127.0.0.1";
-//	 int port = 8002;
-//	 Socket sock;
 	 
 	 private JButton btn1;
 	 private JButton btn2;
@@ -79,13 +73,18 @@ implements ActionListener{
 	 private JButton btnm;
 	 
 	 private JButton btnBack;
-	 
+	 private static UserLogin instance = null;
 	 String arr[]= {"btnq","btnw","btne","btnr","btnt","btny","btnu","btni","btno","btnp"};
 	 
+	 public static UserLogin getInstance() {
+	        if (instance == null) {
+	            instance = new UserLogin();
+	        }
+	        return instance;
+	}
 	 
 	 
-	 
-	public UserLogin() {
+	private UserLogin() {
 		 // setting
         setTitle("FamilyStudyCafe_UserLogin");
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -477,7 +476,7 @@ implements ActionListener{
 				UserLoginEvent login=new UserLoginEvent();
 				int i = login.userLogin(userText.getText(), passText.getText());
 				if(i == 1){
-					PayEnter pay=new PayEnter(userText.getText());
+					PayEnter pay=PayEnter.getInstance(userText.getText());
 					pay.setVisible(true);
 					dispose();
 					JOptionPane.showMessageDialog(null, "환영합니다.");

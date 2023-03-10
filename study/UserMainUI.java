@@ -52,11 +52,12 @@ implements ActionListener, Runnable{
 	int rmtime1;
 	int rmtime2;
 	int rmtime3;
+	private static UserMainUI instance = null;
 	
 	ImageIcon img=new ImageIcon("C:\\Users\\dita810\\Desktop\\FSCTeam\\FamilyStudycafe\\src\\img\\Button_image\\addpay.jpg");
 	ImageIcon imgexit=new ImageIcon("C:\\Users\\dita810\\Desktop\\FSCTeam\\FamilyStudycafe\\src\\img\\Button_image\\exit.jpg");
 
-	public UserMainUI(BufferedReader in, PrintWriter out, String id, String num) {
+	private UserMainUI(BufferedReader in, PrintWriter out, String id, String num) {
 		setSize(850,700);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.id = id;
@@ -111,6 +112,12 @@ implements ActionListener, Runnable{
 			e.printStackTrace();
 		}
 	}//--run
+	public static synchronized UserMainUI getInstance(BufferedReader in, PrintWriter out, String id, String num) {
+        if (instance == null) {
+            instance = new UserMainUI(in, out, id, num);
+        }
+        return instance;
+}
 	
 	
 	
@@ -122,11 +129,10 @@ implements ActionListener, Runnable{
 			//Dialog의 창크기
 			int width = 300;
 			int height = 200;
-			//int x = fx+getWidth()/2-width/2;
-			//int y = fy+getHeight()/2-height/2;
+
 			md.setSize(width, height);
 			md.setLocationRelativeTo(this);
-			//md.setBounds(x, y, width, height);
+
 			md.setVisible(true);
 		}else if(obj == bt3) { // 답변하기
 			if(list.getSelectedItem()!=null) {
@@ -184,9 +190,7 @@ implements ActionListener, Runnable{
 			System.out.println("Rn:"+Rn);
 			String msg = data.substring(idx1 + 1);	// [id]:채팅내용
 			System.out.println("msg:"+msg);
-//			if(Rn.equals(QR[0].roomname)) {
-//				QR[0].addText(msg);
-//			}
+
 			for(int i = 0; QR.length > i; i++) {
 				if(QR[i] != null) {
 					if(Rn.equals(QR[i].roomName)){
@@ -244,7 +248,7 @@ implements ActionListener, Runnable{
 	}//--routine
 	
 	class MyDialog extends Dialog implements ActionListener{
-		Button b1, b2;
+		Button b1, b2, b3;
 		TextField tf;
 		TextArea ta;
 		public MyDialog(Frame owner, String title, boolean modal) {
@@ -280,6 +284,20 @@ implements ActionListener, Runnable{
 			add(ta,BorderLayout.CENTER);
 			b2.addActionListener(this);
 		}
+		public MyDialog(Frame owner, String title, boolean modal, String msg, int i) {
+			super(owner, title, modal);
+			setLayout(new BorderLayout());
+			ta = new TextArea(msg);
+			Panel p = new Panel();
+			
+			b3 = new Button("사용종료");
+			
+			p.add(b3);
+			
+			add(p,BorderLayout.SOUTH);
+			add(ta,BorderLayout.CENTER);
+			b3.addActionListener(this);
+		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -291,13 +309,14 @@ implements ActionListener, Runnable{
 				dispose();//사라지는 기능
 			}else if(obj == b2) {
 				dispose();
+			}else if (obj == b3 ) {
+				dispose();
 			}
 		}
 	}//--MyDialog
 	
 	public void creatRoom(String roomname) {
-//		QR[0] = new MChatQuestionRoom(roomname, in, out, id);
-//		System.out.println(QR[0].roomname);
+
 		int orner = 1;
 		String msg = "이미 있는 질문 입니다.";
 		for(int i = 0; QR.length > i; i++) {
@@ -307,11 +326,10 @@ implements ActionListener, Runnable{
 					//Dialog의 창크기
 					int width = 200;
 					int height = 200;
-					//int x = fx+getWidth()/2-width/2;
-					//int y = fy+getHeight()/2-height/2;
+
 					md.setSize(width, height);
 					md.setLocationRelativeTo(this);
-					//md.setBounds(x, y, width, height);
+
 					md.setVisible(true);
 					return;
 				}
@@ -336,11 +354,10 @@ implements ActionListener, Runnable{
 					//Dialog의 창크기
 					int width = 300;
 					int height = 200;
-					//int x = fx+getWidth()/2-width/2;
-					//int y = fy+getHeight()/2-height/2;
+
 					md.setSize(width, height);
 					md.setLocationRelativeTo(this);
-					//md.setBounds(x, y, width, height);
+
 					md.setVisible(true);
 					return;
 				}
@@ -363,7 +380,7 @@ implements ActionListener, Runnable{
 		
 		Font font=new Font("맑은 고딕", Font.PLAIN, 17);
 		
-		JLabel roomNumber=new JLabel("방번호:"+seatnum);
+		JLabel roomNumber=new JLabel("방번호:"+num);
 		roomNumber.setBounds(0,0,100,50);
 		roomNumber.setFont(font);
 		panel.add(roomNumber);
@@ -381,7 +398,7 @@ implements ActionListener, Runnable{
             @Override
             public void run() {
                 while (true) {
-                    
+               
                     try {
                         Thread.sleep(1000);
                         if (rmtime3==0)
@@ -401,11 +418,55 @@ implements ActionListener, Runnable{
                         	rmtime3=rmtime3-1;
                         }
                         String dtime=rmtime1+"시"+rmtime2+"분"+rmtime3+"초";
-                        remaintime.setText("남은 시간:"+ dtime);
+                        remaintime.setText("남은 시간:"+ dtime);      
+                        if(rmtime1==0&&rmtime2==0&&rmtime3==0) {
+                        	break;
+                        }
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
+                
+				for(int i = 0;QR.length > i; i++) {
+					if(QR[i] != null) {
+						if(QR[i].owner == 1) {
+							sendMessage(ChatProtocol2.DELETELIST+ChatProtocol2.MODE+QR[i].roomName);
+							sendMessage(ChatProtocol2.EXIT+ChatProtocol2.MODE+QR[i].roomName+ChatProtocol2.MODE+id);
+						}else {
+							sendMessage(ChatProtocol2.EXIT+ChatProtocol2.MODE+QR[i].roomName+ChatProtocol2.MODE+id);
+						}
+					}
+				}
+		
+				try {
+					FindUseTable fut = new FindUseTable();
+					FindMemberTable fmt = new FindMemberTable();
+					// 입실시간 찾아오기
+					String usenum = fut.findUse(Integer.parseInt(num));
+					String inTime = fut.findInTime(usenum);
+					LocalDateTime nowDateTime = LocalDateTime.now();
+					DateTimeFormatter dfm = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+					String formatNow = nowDateTime.format(dfm);
+					try {
+						// USE테이블의 퇴실시간을 현재시간으로 설정, 퇴실시간-입실시간 = 사용시간
+						String useTime = fut.usetimeC(inTime, formatNow);
+						fut.updateUse(formatNow, useTime, usenum);
+						// Member테이블의 남은시간 - 사용시간
+						fmt.updateRemainTime(useTime, id);
+						// Seat테이블의 SeatAvail 상태 0으로 변경
+						FindSeatTable fst = new FindSeatTable();
+						fst.seatUpdate(Integer.parseInt(num), 0);
+						
+					} catch (ParseException e1) {
+						e1.printStackTrace();
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+
+				timeOut();
+				exit();
+                
             }
         }).start();
 		remaintime.setBounds(400,0,300,50);
@@ -451,7 +512,8 @@ implements ActionListener, Runnable{
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new Pay(id);
+				Pay pay=Pay.getInstance(id);
+				pay.setVisible(true);
 				dispose();
 			}
 		});
@@ -489,7 +551,7 @@ implements ActionListener, Runnable{
 						fmt.updateRemainTime(useTime, id);
 						// Seat테이블의 SeatAvail 상태 0으로 변경
 						FindSeatTable fst = new FindSeatTable();
-						fst.seatUpdate(seatnum, 0);
+						fst.seatUpdate(Integer.parseInt(num), 0);
 						
 					} catch (ParseException e1) {
 						e1.printStackTrace();
@@ -505,6 +567,24 @@ implements ActionListener, Runnable{
 		
 	}
 	
+	public void timeOut() {
+		String msg = "사용시간이 끝났습니다.";
+		MyDialog md = new MyDialog(this, "시간종료", true, msg, 0);
+		//Dialog의 창크기
+		int width = 300;
+		int height = 200;
+
+		md.setSize(width, height);
+		md.setLocationRelativeTo(this);
+
+		md.setVisible(true);
+		return;
+	}
+
+	public void exit() {
+		System.exit(0);
+	}
+
 	
 	public void addRoomList(String str) {
 		list.add(str);

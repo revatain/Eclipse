@@ -31,7 +31,6 @@ public class UserLoginEvent {
 		try {
 			con=DBconnect.getConnection();
 			pstmt = con.prepareStatement(queryLogin);
-//			String str=Integer.toString(memberTel);
 			pstmt.setString(1, memberTel);
 			ResultSet rs = pstmt.executeQuery();
 			while(rs.next()){
@@ -75,7 +74,7 @@ public class UserLoginEvent {
 	    if (rs==1)
 	    {
 	    	JOptionPane.showMessageDialog(null, "회원 가입 완료");
-	    	Pay pay=new Pay(num);
+	    	Pay pay=Pay.getInstance(num);
         	pay.setVisible(true);
         	JOptionPane.showMessageDialog(null, "로그인을 환영합니다.");
 	    }
@@ -124,12 +123,12 @@ public class UserLoginEvent {
 		try {
 			con=DBconnect.getConnection();
 			String retime=userRemain(id);
-			System.out.println(retime);
+
 			String[] st=retime.split(":");
 			int stime=Integer.parseInt(st[0])+1;
 			remaintime1=remaintime1+stime+st[1]+st[2];
 			remaintime1+=remaintime2;
-			System.out.println(remaintime1);
+
 			pstmt=con.prepareStatement(remaintime1);
 			pstmt.setString(1, id);
 			pstmt.executeUpdate();
@@ -147,12 +146,12 @@ public class UserLoginEvent {
 		try {
 			con=DBconnect.getConnection();
 			String retime=userRemain(id);
-			System.out.println(retime);
+
 			String[] st=retime.split(":");
 			int stime=Integer.parseInt(st[0])+2;
 			remaintime1=remaintime1+stime+st[1]+st[2];
 			remaintime1+=remaintime2;
-			System.out.println(remaintime1);
+
 			pstmt=con.prepareStatement(remaintime1);
 			pstmt.setString(1, id);
 			pstmt.executeUpdate();
@@ -169,12 +168,12 @@ public class UserLoginEvent {
 		try {
 			con=DBconnect.getConnection();
 			String retime=userRemain(id);
-			System.out.println(retime);
+
 			String[] st=retime.split(":");
 			int stime=Integer.parseInt(st[0])+4;
 			remaintime1=remaintime1+stime+st[1]+st[2];
 			remaintime1+=remaintime2;
-			System.out.println(remaintime1);
+
 			pstmt=con.prepareStatement(remaintime1);
 			pstmt.setString(1, id);
 			pstmt.executeUpdate();
@@ -191,12 +190,12 @@ public class UserLoginEvent {
 		try {
 			con=DBconnect.getConnection();
 			String retime=userRemain(id);
-			System.out.println(retime);
+
 			String[] st=retime.split(":");
 			int stime=Integer.parseInt(st[0])+6;
 			remaintime1=remaintime1+stime+st[1]+st[2];
 			remaintime1+=remaintime2;
-			System.out.println(remaintime1);
+
 			pstmt=con.prepareStatement(remaintime1);
 			pstmt.setString(1, id);
 			pstmt.executeUpdate();
@@ -213,12 +212,12 @@ public class UserLoginEvent {
 		try {
 			con=DBconnect.getConnection();
 			String retime=userRemain(id);
-			System.out.println(retime);
+
 			String[] st=retime.split(":");
 			int stime=Integer.parseInt(st[0])+8;
 			remaintime1=remaintime1+stime+st[1]+st[2];
 			remaintime1+=remaintime2;
-			System.out.println(remaintime1);
+
 			pstmt=con.prepareStatement(remaintime1);
 			pstmt.setString(1, id);
 			pstmt.executeUpdate();
@@ -235,12 +234,12 @@ public class UserLoginEvent {
 		try {
 			con=DBconnect.getConnection();
 			String retime=userRemain(id);
-			System.out.println(retime);
+	
 			String[] st=retime.split(":");
 			int stime=Integer.parseInt(st[0])+12;
 			remaintime1=remaintime1+stime+st[1]+st[2];
 			remaintime1+=remaintime2;
-			System.out.println(remaintime1);
+
 			pstmt=con.prepareStatement(remaintime1);
 			pstmt.setString(1, id);
 			pstmt.executeUpdate();
@@ -257,12 +256,12 @@ public class UserLoginEvent {
 		try {
 			con=DBconnect.getConnection();
 			String retime=userRemain(id);
-			System.out.println(retime);
+
 			String[] st=retime.split(":");
 			int stime=Integer.parseInt(st[0])+24;
 			remaintime1=remaintime1+stime+st[1]+st[2];
 			remaintime1+=remaintime2;
-			System.out.println(remaintime1);
+
 			pstmt=con.prepareStatement(remaintime1);
 			pstmt.setString(1, id);
 			pstmt.executeUpdate();
@@ -279,12 +278,12 @@ public class UserLoginEvent {
 		try {
 			con=DBconnect.getConnection();
 			String retime=userRemain(id);
-			System.out.println(retime);
+
 			String[] st=retime.split(":");
 			int stime=Integer.parseInt(st[0])+72;
 			remaintime1=remaintime1+stime+st[1]+st[2];
 			remaintime1+=remaintime2;
-			System.out.println(remaintime1);
+
 			pstmt=con.prepareStatement(remaintime1);
 			pstmt.setString(1, id);
 			pstmt.executeUpdate();
@@ -301,12 +300,12 @@ public class UserLoginEvent {
 		try {
 			con=DBconnect.getConnection();
 			String retime=userRemain(id);
-			System.out.println(retime);
+
 			String[] st=retime.split(":");
 			int stime=Integer.parseInt(st[0])+168;
 			remaintime1=remaintime1+stime+st[1]+st[2];
 			remaintime1+=remaintime2;
-			System.out.println(remaintime1);
+
 			pstmt=con.prepareStatement(remaintime1);
 			pstmt.setString(1, id);
 			pstmt.executeUpdate();
@@ -323,12 +322,12 @@ public class UserLoginEvent {
 		try {
 			con=DBconnect.getConnection();
 			String retime=userRemain(id);
-			System.out.println(retime);
+
 			String[] st=retime.split(":");
 			int stime=Integer.parseInt(st[0])+240;
 			remaintime1=remaintime1+stime+st[1]+st[2];
 			remaintime1+=remaintime2;
-			System.out.println(remaintime1);
+
 			pstmt=con.prepareStatement(remaintime1);
 			pstmt.setString(1, id);
 			pstmt.executeUpdate();
@@ -345,12 +344,12 @@ public class UserLoginEvent {
 		try {
 			con=DBconnect.getConnection();
 			String retime=userRemain(id);
-			System.out.println(retime);
+
 			String[] st=retime.split(":");
 			int stime=Integer.parseInt(st[0])+360;
 			remaintime1=remaintime1+stime+st[1]+st[2];
 			remaintime1+=remaintime2;
-			System.out.println(remaintime1);
+
 			pstmt=con.prepareStatement(remaintime1);
 			pstmt.setString(1, id);
 			pstmt.executeUpdate();
@@ -367,12 +366,12 @@ public class UserLoginEvent {
 		try {
 			con=DBconnect.getConnection();
 			String retime=userRemain(id);
-			System.out.println(retime);
+
 			String[] st=retime.split(":");
 			int stime=Integer.parseInt(st[0])+720;
 			remaintime1=remaintime1+stime+st[1]+st[2];
 			remaintime1+=remaintime2;
-			System.out.println(remaintime1);
+
 			pstmt=con.prepareStatement(remaintime1);
 			pstmt.setString(1, id);
 			pstmt.executeUpdate();

@@ -122,34 +122,20 @@ implements Runnable{
 	PrintWriter out;
 	String id;
 	ManagerQuestionList MQL;
+	private static ManagerMain instance=null;
 	public static void main(String[] args) 
 	{
-		//전부 주석처리하면 이파일자체로 실행안됨, 로그인창에서 넘어오는 실행은 그대로 가능
-//		EventQueue.invokeLater(new Runnable() 
-//		{
-//			public void run() {
-//				try 
-//				{
-//					if (mminstance==null)
-//					{
-//						synchronized (ManagerMain.class) {
-//							ManagerMain Jframe = new ManagerMain("홍길동");
-//							Jframe.setVisible(true);
-//							Jframe.setResizable(false);
-//							Jframe.setTitle("FSC_ManagerMain");
-//						}
-//					}
-//				} 
-//				catch (Exception e) 
-//				{
-//					e.printStackTrace();
-//				}
-//			}
-//		});
+		
+	}
+	public static synchronized ManagerMain getInstance(BufferedReader in,PrintWriter out,String name) throws NumberFormatException, SQLException {
+	      if (instance == null) {
+	         instance = new ManagerMain(in, out, name);
+	      }
+	      return instance;
 	}
 
 	//프레임 생성
-	public ManagerMain(BufferedReader in,PrintWriter out,String name) throws NumberFormatException, SQLException {
+	private ManagerMain(BufferedReader in,PrintWriter out,String name) throws NumberFormatException, SQLException {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(450, 200, 1114, 736);
 		
@@ -288,7 +274,7 @@ implements Runnable{
 			contentPane.add(memberInfoPanel);
 			
 			//회원정보 패널의 회원전화번호
-			JLabel memTelLabel_memInfoPanel = new JLabel("010-0000-0000");
+			JLabel memTelLabel_memInfoPanel = new JLabel("");
 			memTelLabel_memInfoPanel.setHorizontalAlignment(SwingConstants.CENTER);
 			memTelLabel_memInfoPanel.setFont(new Font("Dialog", Font.BOLD, 14));
 			memTelLabel_memInfoPanel.setBackground(new Color(128, 0, 0));
@@ -298,7 +284,7 @@ implements Runnable{
 			
 			//"좌석정보" 글자 라벨
 			JLabel seatInfoStrLabel = new JLabel("좌석정보");
-			//seatInfoStrLabel.setOpaque(true);
+			
 			seatInfoStrLabel.setHorizontalAlignment(JLabel.CENTER);
 			seatInfoStrLabel.setFont(new Font("Dialog", Font.BOLD, 16));
 			seatInfoStrLabel.setBackground(new Color(128, 0, 0));
@@ -307,7 +293,7 @@ implements Runnable{
 			
 			//"좌석번호" 글자 라벨
 			JLabel seatNumStrLabel = new JLabel("좌석번호");
-			//seatNumStrLabel.setOpaque(true);
+			
 			seatNumStrLabel.setHorizontalAlignment(JLabel.CENTER);
 			seatNumStrLabel.setFont(new Font("Dialog", Font.BOLD, 16));
 			seatNumStrLabel.setBackground(new Color(128, 0, 0));
@@ -324,7 +310,7 @@ implements Runnable{
 			
 			//"회원"글자 라벨
 			JLabel memberStrLabel = new JLabel("회원");
-			//memberStrLabel.setOpaque(true);
+			
 			memberStrLabel.setHorizontalAlignment(JLabel.CENTER);
 			memberStrLabel.setFont(new Font("Dialog", Font.BOLD, 16));
 			memberStrLabel.setBackground(new Color(128, 0, 0));
@@ -379,8 +365,7 @@ implements Runnable{
 			JPanel panel1F = new JPanel();
 			panel1F.setBounds(71, 37, 945, 599);
 			panel1F.setLayout(null);
-			//panel1F.setEnabled(false); //패널 비활성화
-			//panel1F.setVisible(false); //패널 감추기
+			
 			contentPane.add(panel1F);
 			
 			//1층 좌석 버튼 생성, 위치지정
@@ -398,7 +383,7 @@ implements Runnable{
 				seat1FBtn[i].setFont(new Font("Dialog", Font.BOLD, 16));
 				seat1FBtn[i].setBorder(lb);
 				seat1FBtn[i].setFocusPainted(false);
-				//seat1FBtn[i].setBackground(new Color(0, 128, 255));
+				
 		    	try {
 					if (findSeatTable.seatAvail(100+i)==0) 
 					{//사용가능
@@ -541,7 +526,7 @@ implements Runnable{
 		//2층 배치도 판넬
 		JPanel panel2F = new JPanel();
 		panel2F.setBounds(71, 37, 945, 599);
-		//panel2F.setBackground(Color.WHITE);
+		
 	    panel2F.setEnabled(false); //패널 비활성화
 		panel2F.setVisible(false); //패널 감추기
 		panel2F.setLayout(null);
@@ -686,7 +671,7 @@ implements Runnable{
 			wall2FLabel[11].setBounds(380, 184, 23, 140);
 			wall2FLabel[12].setBounds(285, 184, 27, 140);
 
-//		setVisible(true);	
+
 		//-----------------------------------------------------------------------------------------
 
 			//로그아웃 버튼--누르면 관리자로그인창으로
@@ -698,8 +683,10 @@ implements Runnable{
     	logoutBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//System.exit(0); //매니저 메인화면 닫기(0 == 정상종료)  <=이거쓰면 새창도 안나옴
-				dispose(); //이걸쓰자
-				new ManagerLogin();//관리자 로그인 창 띄움- 관리자로그인창 고치고 수정필요
+				
+				ManagerLogin managerlogin=ManagerLogin.getInstance();
+				managerlogin.setVisible(true);
+				dispose();
 			}
 		});
 		contentPane.add(logoutBtn);
@@ -718,12 +705,9 @@ implements Runnable{
 		searchQuestionBtn.setFocusPainted(false);// hide focus rectangle
 		searchQuestionBtn.addActionListener(new ActionListener() {//누르면 아래 기능 동작
 			public void actionPerformed(ActionEvent e) {
-	              // QuestDialog생성
-//                QuestDialog questDialog = new QuestDialog //위에서 정의해놓은 QuestDialog 클래스 객체 생성
-//                		("", true, idLabel.getText(),quest1, ManagerMain.this); //매개변수(위에서 정한만큼)
-//                questDialog.setVisible(true);
+
 				
-				MQL = new ManagerQuestionList(in, out, name);
+				MQL = ManagerQuestionList.getInstance(in, out, name);
 				MQL.open();
 			}
 		});
@@ -801,31 +785,40 @@ implements Runnable{
     		public void actionPerformed(ActionEvent e) {
     			JButton seatSource = (JButton)e.getSource(); //클릭한 버튼의 라벨값 읽어옴
     			FindUseTable findUseTable = new FindUseTable();
-    			String usestat = null; //seatInfoPanel의 memberTelLabel에 들어갈 
+    			FindSeatTable fst = new FindSeatTable();
+    			String usenum = ""; //사용번호
+    			int seatavail = 0;
+    			String telMember = ""; //seatInfoPanel의 memberTelLabel에 들어갈 전화번호
+    	
+    			memberInfoBtn.setEnabled(false);
     			
     			//의자 라벨의 값 읽어와서 의자정보 패널의 의자번호 라벨에 붙임
     			seatNumLabel_seatInfoPanel.setText(seatSource.getText());
-    			//if(memberInfoPanel.isEnabled()==false||seatInfoPanel.isEnabled()==false) //TODO 조건문 미동작?
+    			
     			//{
     				//클릭한 의자라벨값 읽어와서 findUse 실행(사용중인지 검사)
     				try {
-						usestat = findUseTable.findUse(Integer.parseInt(seatSource.getText()));
+    					usenum = findUseTable.findUse(Integer.parseInt(seatSource.getText()));//사용번호 찾아오기
+    					seatavail = fst.seatAvail(Integer.parseInt(seatSource.getText()));//의자상태 확인
+                        telMember = findUseTable.findmemt(Integer.parseInt(usenum)); //사용번호로 전화번호 검색
+                        System.out.println("ManagerMain.usestat: "+usenum);
+                        System.out.println("ManagerMain.telMember: "+telMember);
 					} catch (NumberFormatException e1) {
 						e1.printStackTrace();
 					} catch (SQLException e1) {
 						e1.printStackTrace();
 					}
-    				if(usestat=="0")//리턴받은값이 0이면 회원전화번호 라벨에서 지우기(공백상태로 둠)
-    				{
-    					memberInfoBtn.setEnabled(false);
-    					memberTelLabel.setText("");
-    				}
-    				else
+    				if(seatavail == 1)//의자가 사용중이면
     				{
     					//seatInfo 패널의 정보 버튼 활성화
     					memberInfoBtn.setEnabled(true); 					
     					//사용 테이블에서 유저 전화번호 검색해와서 집어넣기
-    					memberTelLabel.setText(usestat);
+    					memberTelLabel.setText(telMember);
+    				}
+    				else
+    				{
+    					memberInfoBtn.setEnabled(false);
+    					memberTelLabel.setText("");
     				}
     				
     				memberInfoPanel.setEnabled(false);
@@ -877,7 +870,7 @@ implements Runnable{
 			public void actionPerformed(ActionEvent e) {
 				seatInfoPanel.setEnabled(false);
 				seatInfoPanel.setVisible(false);
-				
+				memberInfoBtn.setEnabled(false);
 				//패널 아래의 1층좌석 버튼 활성화
 				seat1FBtn[10].setEnabled(true);
 				seat1FBtn[10].setVisible(true);
@@ -944,16 +937,4 @@ implements Runnable{
 		}
 
 	}
-	
-//	public static ManagerMain getInstance()
-//	{
-//		if(mminstance==null)
-//		{
-//			synchronized (ManagerMain).class) {
-//				mminstance = new ManagerMain();
-//			}
-//		}
-//		
-//		return mminstance;
-//	}
 }

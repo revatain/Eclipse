@@ -113,11 +113,7 @@ implements ActionListener{
 	}
 	
 	
-//	public MChatQuestionRoom(String roomname, String msg) {
-//		if(roomname == this.roomname) {
-//			ta.append(msg);
-//		}
-//	}
+
 	
 
 	@Override

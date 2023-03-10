@@ -23,8 +23,15 @@ implements ActionListener{
 	List questionList;
 	JButton bt1,bt2;
 	String listTitle = "*******질문 명단*******";
+	private static ManagerQuestionList instance=null;
+	public static synchronized ManagerQuestionList getInstance(BufferedReader in,PrintWriter out,String name) {
+	      if (instance == null) {
+	         instance = new ManagerQuestionList(in, out, name);
+	      }
+	      return instance;
+	  }
 	
-	public ManagerQuestionList(BufferedReader in, PrintWriter out, String id) {
+	private ManagerQuestionList(BufferedReader in, PrintWriter out, String id) {
 		setSize(450, 500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.in = in;

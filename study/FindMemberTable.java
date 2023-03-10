@@ -68,16 +68,16 @@ public class FindMemberTable {
 		
 		// 비교 
 		long diff = remaintimeMil - usetimeMil;
-		//System.out.println("remtimeC diff:"+diff);
+		
 		int diffTime = (int) (diff/ (1000 * 60 * 60));
-		//System.out.println("remtimeC diffTime:"+diffTime);
+		
 		int diffMin = (int) (diff / (1000 * 60)-(diffTime*60));
-		//System.out.println("remtimeC diffMin:"+diffMin);
+		
 		int diffSec = (int) (diff / 1000 -(diffTime*3600) -(diffMin*60));
-		//System.out.println("remtimeC diffSec:"+diffSec);
+		
 				
 		remtime = diffTime+":"+diffMin+":"+diffSec;
-		//System.out.println("remTimeC:rem time is "+usetime);
+		
 		return remtime;
 	}
 	

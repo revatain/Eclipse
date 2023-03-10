@@ -53,7 +53,7 @@ public class FindUseTable {
 			ResultSet rs = null;
 			String queryFindUse="select useNum from `use` "
 					+ "where seatNum = ?";
-			String usenumReturn=null;
+			String usenumReturn="0";
 			
 			try
 			{
@@ -61,13 +61,9 @@ public class FindUseTable {
 				pstmt=con.prepareStatement(queryFindUse);
 				pstmt.setInt(1, seatnum);
 				rs = pstmt.executeQuery();
-				if(rs.next()) 
+				while(rs.next()) 
 				{
 					usenumReturn=rs.getString("useNum");
-				}
-				else
-				{
-					usenumReturn="0";
 				}
 			}
 			catch (SQLException e) 
@@ -93,31 +89,37 @@ public class FindUseTable {
 			String queryFindmemt="select memberTel from `use` "
 					+ "where useNum = ?";
 			String memtelReturn=null;
-			
-			try
+			if (usenum==0)
 			{
-				con = DBconnect.getConnection();
-				pstmt=con.prepareStatement(queryFindmemt);
-				pstmt.setInt(1, usenum);
-				rs = pstmt.executeQuery();
-				if(rs.next()) 
-				{
-					memtelReturn=rs.getString(1);
-				}
-				else
-				{
-					memtelReturn="0";
-				}
+				memtelReturn = "";
 			}
-			catch (SQLException e) 
-			{ 
-				e.printStackTrace();
-			} 
-			finally 
+			else 
 			{
-				rs.close();
-				pstmt.close();
-				con.close();
+				try
+				{
+					con = DBconnect.getConnection();
+					pstmt=con.prepareStatement(queryFindmemt);
+					pstmt.setInt(1, usenum);
+					rs = pstmt.executeQuery();
+					if(rs.next()) 
+					{
+						memtelReturn=rs.getString(1);
+					}
+					else
+					{
+						memtelReturn="0";
+					}
+				}
+				catch (SQLException e) 
+				{ 
+					e.printStackTrace();
+				} 
+				finally 
+				{
+					rs.close();
+					pstmt.close();
+					con.close();
+				}
 			}
 			System.out.println("memtelReturn:"+memtelReturn);
 			return memtelReturn;
@@ -156,6 +158,43 @@ public class FindUseTable {
 			System.out.println("findInTime:"+inTime);
 			return inTime;
 		}
+		
+		//USE테이블에서 퇴실시간 찾아오기
+				public String findOutTime(String usenum) throws SQLException
+				{
+					String outTime="0";
+					Connection con=null;
+					PreparedStatement pstmt = null;
+					ResultSet rs = null;
+				
+					String queryFindOutTime = "select checkoutTime from `USE` "
+							+ "where useNum = ?";
+
+					try {
+						con=DBconnect.getConnection();
+						pstmt=con.prepareStatement(queryFindOutTime);
+						pstmt.setString(1, usenum);
+						rs = pstmt.executeQuery();
+						if(rs.next()&&rs==null)
+						{
+							outTime="0";
+						}
+						else if(rs.next())
+						{
+							outTime = rs.getString("checkoutTime");
+						}						
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					finally 
+					{
+						rs.close();
+						pstmt.close();
+						con.close();
+					}
+					System.out.println("findoutTime:"+outTime);
+					return outTime;
+				}
 		
 		//useTime(사용시간) 계산
 		public String usetimeC(String checkintime,
